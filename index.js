@@ -4,24 +4,19 @@ import { Provider, connect } from 'react-redux';
 
 class PlayerScore extends Component {
   render() {
+    const { score } = this.props;
     return (
-      <li
-        onClick={this.props.onClick}
-        style={{
-          textDecoration: this.props.completed ? "line-through" : "none",
-          cursor: this.props.completed ? "default" : "pointer"
-        }}>
-        {this.props.text}
+      <li>
+        <div>{score.current} | {score.total}</div>
       </li>
     );
   }
 }
 
-
 // React component
 class Scorekeeper extends Component {
   render(){
-    const { total, current, handleSubmit } = this.props;
+    const { playerScores, handleSubmit } = this.props;
     return (
       <div>
         <div> Player 1 </div>
@@ -33,7 +28,11 @@ class Scorekeeper extends Component {
         </div>
         <div>
         <div>Current | Total</div>
-        <div>{current} | {total}</div>
+        <ul className='score-list'>
+          {playerScores.map(score =>
+            <PlayerScore key={score.id} score={score} />
+          )}
+        </ul>
         </div>
       </div>
     );
@@ -55,25 +54,35 @@ function pointsAction(points) {
 }
 
 // Reducer:
-function scorekeeper(state={total: 0, current: 0}, action) {
+const initialState = [{
+  id: 0,
+  current: 0,
+  total: 0,
+}];
+
+function playerScores(state = initialState, action) {
   var points = parseInt(action.points);
-  let total = state.total;
+  let total = state[0].total;
   switch(action.type){
     case 'increase':
-      return {current: points, total: total + points};
+      return [{
+        id: state.length,
+        current: points,
+        total: total + points
+      }, ...state];
+
     default:
       return state;
   }
 }
 
 // Store:
-let store = createStore(scorekeeper);
+let store = createStore(playerScores);
 
 // Map Redux state to component props
 function mapStateToProps(state)  {
   return {
-    total: state.total,
-    current: state.current
+    playerScores: state
   };
 }
 
