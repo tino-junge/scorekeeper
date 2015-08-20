@@ -21,18 +21,19 @@ class PlayerScore extends Component {
 // React component
 class Scorekeeper extends Component {
   render(){
-    const { value, handleSubmit } = this.props;
+    const { total, current, handleSubmit } = this.props;
     return (
       <div>
         <div> Player 1 </div>
         <div>
-          <input type="number" placeholder="0" ref='input' />
+          <input type="number" defaultValue="0" ref='input' />
           <button onClick={(e) => this.handleAddPoints(e)}>
-         Add
-       </button>
+            Enter
+          </button>
         </div>
         <div>
-        <span>{value}</span>
+        <div>Current | Total</div>
+        <div>{current} | {total}</div>
         </div>
       </div>
     );
@@ -54,13 +55,12 @@ function pointsAction(points) {
 }
 
 // Reducer:
-function scorekeeper(state={count: 0}, action) {
-  console.log(action.points);
+function scorekeeper(state={total: 0, current: 0}, action) {
   var points = parseInt(action.points);
-  let count = state.count;
+  let total = state.total;
   switch(action.type){
     case 'increase':
-      return {count: count + points};
+      return {current: points, total: total + points};
     default:
       return state;
   }
@@ -72,7 +72,8 @@ let store = createStore(scorekeeper);
 // Map Redux state to component props
 function mapStateToProps(state)  {
   return {
-    value: state.count
+    total: state.total,
+    current: state.current
   };
 }
 
