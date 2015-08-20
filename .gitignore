@@ -1,7 +1,4 @@
 .DS_Store
 *.log
-node_modules
-dist
-lib
-coverage
-_book
+node_modules/
+bundle.js
