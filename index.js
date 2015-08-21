@@ -1,49 +1,40 @@
-import React, { findDOMNode, Component, PropTypes } from 'react';
+import React, { findDOMNode, Component, PropTypes, className } from 'react';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 
+// PlayerScore component
 class PlayerScore extends Component {
   render() {
     const { score } = this.props;
     return (
-      <li>
-        <div>{score.round}: {score.points} | {score.total}</div>
-      </li>
+      <div className='row'>
+        <span>{score.round}</span><span>{score.points}</span><span>{score.total}</span>
+      </div>
     );
   }
 }
 
-const players = [
-  {
-    id: 0,
-    name: 'Player 1'
-  },
-  {
-    id: 1,
-    name: 'Player 2'
-  }
-]
-
+// Player component
 class Player extends Component {
   render() {
     const { player, playerScores, handleSubmit } = this.props;
 
     return (
-      <div style={{ float: 'left', padding: '20px' }}>
-        <div> {player.name} </div>
-        <div>
-          <input type="number" defaultValue="0" ref='input' />
+      <div className='player'>
+        <h3> {player.name} </h3>
+        <div className='inputForm'>
+          <input type='number' defaultValue='0' ref='input' />
           <button onClick={(e) => this.handleAddPoints(e, player.id)}>
             Enter
           </button>
         </div>
-        <div>
-        <p>Round | Points | Total</p>
-        <ul className='score-list'>
+        <div className='scores'>
+          <h4 className='row'>
+            <span>Round</span><span>Points</span><span>Total</span>
+          </h4>
           {playerScores.map(score =>
             <PlayerScore key={score.id} score={score} />
           )}
-        </ul>
         </div>
       </div>
     );
@@ -55,20 +46,33 @@ class Player extends Component {
   }
 }
 
-// React component
+// Scorekeeper component
+const players = [
+  {
+    id: 0,
+    name: 'Player 1'
+  },
+  {
+    id: 1,
+    name: 'Player 2'
+  }
+]
+
 class Scorekeeper extends Component {
   render(){
     const { players, playerScores, onAddPoints } = this.props;
     return (
-      <div>
-        {players.map(player =>
-          <Player
-            key={player.id}
-            player={player}
-            onAddPoints={onAddPoints}
-            playerScores={playerScores.filter(score => score.playerId == player.id)}
-          />
-        )}
+      <div id='scoreboard'>
+        <div id='players'>
+          {players.map(player =>
+            <Player
+              key={player.id}
+              player={player}
+              onAddPoints={onAddPoints}
+              playerScores={playerScores.filter(score => score.playerId == player.id)}
+            />
+          )}
+        </div>
       </div>
     );
   }
