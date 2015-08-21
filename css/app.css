@@ -4,6 +4,8 @@ h1 {
 }
 h3 {
   text-align: center;
+  border-bottom: dashed;
+  padding-bottom: 20px;
 }
 h4 {
   padding-top: 10px;
@@ -11,6 +13,8 @@ h4 {
 .player {
   float: left;
   padding: 20px;
+  border: dashed;
+  margin: 5px;
 }
 .scores {
   display: table;
